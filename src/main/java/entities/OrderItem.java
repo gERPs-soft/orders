@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 /**
  * Created by szypows_local on 17.11.2018.
  */
+@Entity
 public class OrderItem {
     @Id
     @GeneratedValue

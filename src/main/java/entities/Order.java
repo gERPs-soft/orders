@@ -1,5 +1,8 @@
 package entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,6 +10,8 @@ import java.util.List;
 /**
  * Created by szypows_local on 17.11.2018.
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "[order]")
 public class Order {

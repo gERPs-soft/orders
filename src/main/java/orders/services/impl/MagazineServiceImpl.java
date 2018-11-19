@@ -26,4 +26,10 @@ public class MagazineServiceImpl implements MagazineService {
         OrderStatusDto orderStatusDto = restTemplate.postForObject(magazineOrderUrl, orderDto, OrderStatusDto.class);
         return orderStatusDto;
     }
+    @Override
+    public OrderStatusDto postOrderToOrder(OrderDto orderDto) {
+        String magazineOrderUrl = "http://localhost:8082/order/save";
+        OrderStatusDto orderStatusDto = restTemplate.postForObject(magazineOrderUrl, orderDto, OrderStatusDto.class);
+        return orderStatusDto;
+    }
 }

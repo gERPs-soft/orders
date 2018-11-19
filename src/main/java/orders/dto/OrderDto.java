@@ -18,4 +18,10 @@ public class OrderDto {
 
     public OrderDto() {
     }
+
+    public OrderDto(Long sellerId, Long customerId, List<OrderItemDto> items) {
+        this.sellerId = sellerId;
+        this.customerId = customerId;
+        this.items = items;
+    }
 }

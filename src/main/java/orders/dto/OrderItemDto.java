@@ -13,4 +13,11 @@ public class OrderItemDto {
     private Long productId;
     private Integer quantity;
 
+    public OrderItemDto() {
+    }
+
+    public OrderItemDto(Long productId, Integer quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
 }

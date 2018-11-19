@@ -1,9 +1,11 @@
 package controller;
 
 import dto.OrderDto;
+import dto.OrderStatusDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import services.MagazineService;
 import services.OrderService;
 
 /**
@@ -12,13 +14,16 @@ import services.OrderService;
 @Controller
 public class OrderController {
     private OrderService orderService;
+    private MagazineService magazineService;
 
-    public OrderController(OrderService orderService) {
+    @Autowired
+    public OrderController(OrderService orderService, MagazineService magazineService) {
     }
 
     @PostMapping("/order/save")
-    public String saveOrder(@ModelAttribute OrderDto orderDto) {
+    public OrderStatusDto saveOrder(@ModelAttribute OrderDto orderDto) {
         orderService.save(orderDto);
-        return "redirect:/message?msg=Save OK!!";
+        OrderStatusDto orderStatusDto = magazineService.postOrderToMagazine(orderDto);
+        return orderStatusDto;
     }
 }

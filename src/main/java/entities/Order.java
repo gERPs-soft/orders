@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -25,7 +25,7 @@ public class Order {
 
     private Long sellerId;
 
-    private LocalDateTime orderDate;
+    private LocalDate orderDate;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;

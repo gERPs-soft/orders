@@ -4,6 +4,7 @@ import converters.CustomerDtoConverter;
 import dto.CustomerDto;
 import entities.Customer;
 import exceptions.CustomernotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import repositories.CustomerRepository;
 import services.CustomerService;
 
@@ -17,6 +18,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
     private CustomerDtoConverter customerDtoConverter;
 
+    @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository, CustomerDtoConverter customerDtoConverter) {
     }
 

@@ -1,13 +1,11 @@
 package entities;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by szypows_local on 17.11.2018.
  */
+@Entity
 public class Customer {
 
     @Id

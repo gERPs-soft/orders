@@ -1,0 +1,1 @@
+insert into CUSTOMER values (NULL,'Adam','Nowak','NULL','Prosta 5 02-405 Warszawa',NULL ,'555-678-976','adam@gmail.com','INDIVIDUAL');

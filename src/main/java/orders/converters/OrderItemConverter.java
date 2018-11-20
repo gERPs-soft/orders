@@ -15,6 +15,9 @@ public class OrderItemConverter implements Function<OrderItemDto, OrderItem> {
     @Override
     public OrderItem apply(OrderItemDto orderItemDto) {
         OrderItem orderItem = new OrderItem();
+        orderItem.setProductId(orderItemDto.getProductId());
+        orderItem.setQuantity(orderItemDto.getQuantity());
+        orderItem.setProductPrice(orderItemDto.getProductPrice());
         return orderItem;
     }
 }

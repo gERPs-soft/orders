@@ -20,9 +20,13 @@ import java.util.stream.Collectors;
  */
 @Service
 public class OrderServiceImpl implements OrderService {
+    @Autowired
     private OrderRepository orderRepository;
+    @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
     private OrderItemConverter orderItemConverter;
+
     private RestTemplate restTemplate;
 
     @Autowired

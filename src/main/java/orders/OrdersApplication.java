@@ -1,4 +1,4 @@
-package com.gerps.orders;
+package orders;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

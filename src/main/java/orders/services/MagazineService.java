@@ -8,6 +8,4 @@ import orders.dto.OrderStatusDto;
  */
 public interface MagazineService {
     public OrderStatusDto postOrderToMagazine(OrderDto orderDto);
-
-    public OrderStatusDto postOrderToOrder(OrderDto orderDto);
 }

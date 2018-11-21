@@ -25,24 +25,11 @@ public class OrderController {
     @Autowired
     private MagazineService magazineService;
 
-    @Autowired
-    public OrderController(OrderService orderService, MagazineService magazineService) {
-    }
-
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/order/save")
     public OrderStatusDto saveOrder(@RequestBody OrderDto orderDto) {
         orderService.save(orderDto);
         OrderStatusDto orderStatusDto = magazineService.postOrderToMagazine(orderDto);
         return orderStatusDto;
-    }
-
-    @GetMapping("/test")
-    public void testMe() {
-        OrderItemDto orderItemDto = new OrderItemDto(1l, 1, BigDecimal.valueOf(3.45));
-        List<OrderItemDto> orderItemDtoList = new ArrayList<>();
-        orderItemDtoList.add(orderItemDto);
-        OrderDto orderDto = new OrderDto(1l, 1l, orderItemDtoList);
-        magazineService.postOrderToOrder(orderDto);
     }
 }

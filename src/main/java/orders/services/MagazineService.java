@@ -1,11 +1,12 @@
 package orders.services;
 
 import orders.dto.OrderDto;
-import orders.dto.OrderStatusDto;
+
+import java.time.LocalDate;
 
 /**
  * Created by szypows_local on 19.11.2018.
  */
 public interface MagazineService {
-    public OrderStatusDto postOrderToMagazine(OrderDto orderDto);
+    public LocalDate postOrderToMagazine(OrderDto orderDto);
 }

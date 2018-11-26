@@ -2,17 +2,19 @@ package orders.services.impl;
 
 import orders.converters.OrderItemConverter;
 import orders.dto.OrderDto;
+import orders.dto.OrderStatusDto;
 import orders.entities.Order;
 import orders.entities.OrderStatus;
+import orders.exceptions.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import orders.repositories.CustomerRepository;
 import orders.repositories.OrderRepository;
 import orders.services.OrderService;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -45,4 +47,30 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.save(order);
         return savedOrder.getId();
     }
+
+    @Override
+    public void updateStatus(OrderStatusDto orderStatusDto) throws OrderNotFoundException {
+        Long id = orderStatusDto.getOrderId();
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            order.setOrderStatus(orderStatusDto.getOrderStatus());
+            orderRepository.save(order);
+        } else {
+            throw new OrderNotFoundException("Can't find order with ID " + id);
+        }
+    }
+
+    @Override
+    public void updateSendDate(Long id, LocalDate sendDate) throws OrderNotFoundException {
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            order.setSendDate(sendDate);
+            orderRepository.save(order);
+        } else {
+            throw new OrderNotFoundException("Can't find order with ID " + id);
+        }
+    }
+
 }

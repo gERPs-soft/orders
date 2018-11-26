@@ -2,7 +2,11 @@ package orders.controller;
 
 import orders.dto.OrderDto;
 import orders.dto.OrderStatusDto;
+import orders.entities.OrderStatus;
+import orders.exceptions.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import orders.services.MagazineService;
 import orders.services.OrderService;
@@ -22,21 +26,31 @@ public class OrderController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/order/save")
-    public OrderStatusDto saveOrder(@RequestBody OrderDto orderDto) {
+    public LocalDate saveOrder(@RequestBody OrderDto orderDto) {
         Long orderId = orderService.save(orderDto);
         //waiting for magazine implementation
-        orderDto.setOrderId(orderId);
-        System.out.println(orderDto.toString());
-        // OrderStatusDto orderStatusDto = magazineService.postOrderToMagazine(orderDto);
+        //LocalDate sendDate = magazineService.postOrderToMagazine(orderDto);
         //mocked answer
-        OrderStatusDto orderStatusDto = new OrderStatusDto(LocalDate.now().toString());
-        return orderStatusDto;
+        LocalDate sendDate = LocalDate.now();
+        try {
+            orderService.updateSendDate(orderId, sendDate);
+        } catch (OrderNotFoundException e) {
+            e.printStackTrace();
+        }
+        return sendDate;
     }
 
     //update order by magazine
-    //order can by CANCELED by SELLER form VIEW
-    @PostMapping("order/update")
-    public void updateOrder(@RequestBody OrderStatusDto orderStatusDto) {
-        //orderService.update(orderStatusDto);
+    //order can by CANCELED by SELLER from VIEW
+    @PostMapping("order/update_status")
+    public ResponseEntity updateOrderStatus(@RequestBody OrderStatusDto orderStatusDto) {
+        try {
+            orderService.updateStatus(orderStatusDto);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (OrderNotFoundException e) {
+            e.printStackTrace();
+        }
+        Long id = orderStatusDto.getOrderId();
+        return new ResponseEntity(HttpStatus.valueOf("Can't find order with id: " + id));
     }
 }

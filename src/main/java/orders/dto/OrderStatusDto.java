@@ -2,6 +2,7 @@ package orders.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import orders.entities.OrderStatus;
 
 /**
  * Created by szypows_local on 19.11.2018.
@@ -9,10 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderStatusDto {
-    private String deliveryTime;
+    private Long orderId;
+    private OrderStatus orderStatus;
 
-    public OrderStatusDto(String deliveryTime) {
-        this.deliveryTime = deliveryTime;
+    public OrderStatusDto(Long orderId, OrderStatus orderStatus) {
+        this.orderId = orderId;
+        this.orderStatus = orderStatus;
     }
-
 }

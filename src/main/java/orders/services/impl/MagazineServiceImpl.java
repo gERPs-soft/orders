@@ -1,12 +1,13 @@
 package orders.services.impl;
 
 import orders.dto.OrderDto;
-import orders.dto.OrderStatusDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import orders.services.MagazineService;
+
+import java.time.LocalDate;
 
 /**
  * Created by szypows_local on 19.11.2018.
@@ -21,9 +22,9 @@ public class MagazineServiceImpl implements MagazineService {
     }
 
     @Override
-    public OrderStatusDto postOrderToMagazine(OrderDto orderDto) {
+    public LocalDate postOrderToMagazine(OrderDto orderDto) {
         String magazineOrderUrl = "http://localhost:8082/magazine/add_order";
-        OrderStatusDto orderStatusDto = restTemplate.postForObject(magazineOrderUrl, orderDto, OrderStatusDto.class);
-        return orderStatusDto;
+        LocalDate sendDate = restTemplate.postForObject(magazineOrderUrl, orderDto, LocalDate.class);
+        return sendDate;
     }
 }

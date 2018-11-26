@@ -3,6 +3,7 @@ package orders.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ public class OrderDto {
     private Long orderId;
     private Long sellerId;
     private Long customerId;
+    private LocalDate sendDate;
     private List<OrderItemDto> items;
 
     public OrderDto() {
@@ -24,15 +26,5 @@ public class OrderDto {
         this.sellerId = sellerId;
         this.customerId = customerId;
         this.items = items;
-    }
-
-    @Override
-    public String toString() {
-        return "OrderDto{" +
-                "orderId=" + orderId +
-                ", sellerId=" + sellerId +
-                ", customerId=" + customerId +
-                ", items=" + items +
-                '}';
     }
 }

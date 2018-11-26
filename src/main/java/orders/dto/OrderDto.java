@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 public class OrderDto {
 
+    private Long orderId;
     private Long sellerId;
     private Long customerId;
     private List<OrderItemDto> items;
@@ -23,5 +24,15 @@ public class OrderDto {
         this.sellerId = sellerId;
         this.customerId = customerId;
         this.items = items;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderDto{" +
+                "orderId=" + orderId +
+                ", sellerId=" + sellerId +
+                ", customerId=" + customerId +
+                ", items=" + items +
+                '}';
     }
 }

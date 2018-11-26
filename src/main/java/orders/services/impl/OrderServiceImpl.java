@@ -27,16 +27,13 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderItemConverter orderItemConverter;
 
-    private RestTemplate restTemplate;
-
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository,
                             OrderItemConverter orderItemConverter, RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
     }
 
     @Override
-    public void save(OrderDto orderDto) {
+    public Long save(OrderDto orderDto) {
         Order order = new Order();
         Long customerId = orderDto.getCustomerId();
         order.setCustomer(customerRepository.findById(customerId).get());
@@ -45,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(OrderStatus.DRAFT);
         order.setOrderItems(orderDto.getItems().stream()
                 .map(orderItemConverter).collect(Collectors.toList()));
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        return savedOrder.getId();
     }
 }

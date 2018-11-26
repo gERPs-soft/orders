@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 
 /**
- * Created by szypows_local on 27.10.2018.
+ * Created by szypows_local on 18.11.2018.
  */
 @Component
 public class CustomerConverter implements Function<CustomerDto, Customer> {

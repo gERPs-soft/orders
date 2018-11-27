@@ -15,6 +15,7 @@ import orders.repositories.OrderRepository;
 import orders.services.OrderService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,14 +66,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findAll() {
-//        List<OrderDto> orderDtoList = orderRepository.findAll().forEach(order->orderDtoConverter.apply(order));
-        return null;
+    public List<Order> findAll() {
+        List<Order> orderList = new ArrayList<>();
+        orderRepository.findAll().forEach(orderList::add);
+        return orderList;
     }
 
     @Override
-    public OrderDto findById(Long id) {
-        return null;
+    public Optional<Order> findById(Long id) {
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        if (optionalOrder.isPresent()) {
+            return optionalOrder;
+        } else {
+            return Optional.empty();
+        }
     }
 
 }

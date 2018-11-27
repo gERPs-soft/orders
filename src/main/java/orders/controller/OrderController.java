@@ -32,10 +32,10 @@ public class OrderController {
         //waiting for magazine implementation
         OrderStatusDetails orderStatusDetails = magazineService.postOrderToMagazine(orderDto);
         //mocked answer
-        LocalDateTime sendDate = LocalDateTime.now();
+        // LocalDateTime sendDate = LocalDateTime.now();
         try {
             orderService.updateStatus(orderStatusDetails);
-            return new ResponseEntity(sendDate, HttpStatus.OK);
+            return new ResponseEntity(orderStatusDetails.getSendDate(), HttpStatus.OK);
         } catch (OrderNotFoundException e) {
             e.printStackTrace();
         }

@@ -31,9 +31,11 @@ public class OrderServiceImpl implements OrderService {
     private OrderDtoConverter orderDtoConverter;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository,
-                            OrderItemConverter orderItemConverter, RestTemplateBuilder restTemplateBuilder,
-                            OrderDtoConverter orderDtoConverter) {
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, OrderItemConverter orderItemConverter, OrderDtoConverter orderDtoConverter) {
+        this.orderRepository = orderRepository;
+        this.customerRepository = customerRepository;
+        this.orderItemConverter = orderItemConverter;
+        this.orderDtoConverter = orderDtoConverter;
     }
 
     @Override

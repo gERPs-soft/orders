@@ -1,5 +1,6 @@
 package orders.services.impl;
 
+import orders.converters.OrderDtoConverter;
 import orders.converters.OrderItemConverter;
 import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
@@ -14,6 +15,7 @@ import orders.repositories.OrderRepository;
 import orders.services.OrderService;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,16 +24,16 @@ import java.util.stream.Collectors;
  */
 @Service
 public class OrderServiceImpl implements OrderService {
-    @Autowired
+
     private OrderRepository orderRepository;
-    @Autowired
     private CustomerRepository customerRepository;
-    @Autowired
     private OrderItemConverter orderItemConverter;
+    private OrderDtoConverter orderDtoConverter;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository,
-                            OrderItemConverter orderItemConverter, RestTemplateBuilder restTemplateBuilder) {
+                            OrderItemConverter orderItemConverter, RestTemplateBuilder restTemplateBuilder,
+                            OrderDtoConverter orderDtoConverter) {
     }
 
     @Override
@@ -60,6 +62,17 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw new OrderNotFoundException("Can't find order with ID " + id);
         }
+    }
+
+    @Override
+    public List<OrderDto> findAll() {
+//        List<OrderDto> orderDtoList = orderRepository.findAll().forEach(order->orderDtoConverter.apply(order));
+        return null;
+    }
+
+    @Override
+    public OrderDto findById(Long id) {
+        return null;
     }
 
 }

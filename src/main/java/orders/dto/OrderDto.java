@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class OrderDto {
     private Long orderId;
     private Long sellerId;
     private Long customerId;
-    private LocalDate sendDate;
+    private LocalDateTime sendDate;
     private List<OrderItemDto> items;
 
     public OrderDto() {

@@ -11,6 +11,7 @@ import orders.services.MagazineService;
 import orders.services.OrderService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -54,5 +55,15 @@ public class OrderController {
         }
         Long id = orderStatusDetails.getOrderId();
         return new ResponseEntity(HttpStatus.valueOf("Can't find order with id: " + id));
+    }
+
+    @RequestMapping("/orders")
+    public ResponseEntity findAll() {
+        return new ResponseEntity(orderService.findAll(), HttpStatus.OK);
+    }
+
+    @RequestMapping("/{id}")
+    public ResponseEntity findById(@PathVariable Long id) {
+        return new ResponseEntity(orderService.findById(id), HttpStatus.OK);
     }
 }

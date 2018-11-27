@@ -3,6 +3,9 @@ package orders.services;
 import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
 import orders.exceptions.OrderNotFoundException;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * Created by szypows_local on 18.11.2018.
@@ -10,4 +13,6 @@ import orders.exceptions.OrderNotFoundException;
 public interface OrderService {
     public Long save(OrderDto orderDto);
     public void updateStatus(OrderStatusDetails orderStatusDetails) throws OrderNotFoundException;
+    public List<OrderDto> findAll();
+    public OrderDto findById(Long id);
 }

@@ -23,7 +23,7 @@ public class MagazineServiceImpl implements MagazineService {
 
     @Override
     public LocalDate postOrderToMagazine(OrderDto orderDto) {
-        String magazineOrderUrl = "http://localhost:8082/magazine/add_order";
+        String magazineOrderUrl = "http://localhost:8082/magazine/orders/add-order";
         LocalDate sendDate = restTemplate.postForObject(magazineOrderUrl, orderDto, LocalDate.class);
         return sendDate;
     }

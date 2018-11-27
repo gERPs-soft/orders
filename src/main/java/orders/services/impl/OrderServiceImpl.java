@@ -2,7 +2,7 @@ package orders.services.impl;
 
 import orders.converters.OrderItemConverter;
 import orders.dto.OrderDto;
-import orders.dto.OrderStatusDto;
+import orders.dto.OrderStatusDetails;
 import orders.entities.Order;
 import orders.entities.OrderStatus;
 import orders.exceptions.OrderNotFoundException;
@@ -49,24 +49,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateStatus(OrderStatusDto orderStatusDto) throws OrderNotFoundException {
-        Long id = orderStatusDto.getOrderId();
+    public void updateStatus(OrderStatusDetails orderStatusDetails) throws OrderNotFoundException {
+        Long id = orderStatusDetails.getOrderId();
         Optional<Order> orderOptional = orderRepository.findById(id);
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
-            order.setOrderStatus(orderStatusDto.getOrderStatus());
-            orderRepository.save(order);
-        } else {
-            throw new OrderNotFoundException("Can't find order with ID " + id);
-        }
-    }
-
-    @Override
-    public void updateSendDate(Long id, LocalDate sendDate) throws OrderNotFoundException {
-        Optional<Order> orderOptional = orderRepository.findById(id);
-        if (orderOptional.isPresent()) {
-            Order order = orderOptional.get();
-            order.setSendDate(sendDate);
+            order.setOrderStatus(orderStatusDetails.getOrderStatus());
+            order.setSendDate(orderStatusDetails.getSendDate());
             orderRepository.save(order);
         } else {
             throw new OrderNotFoundException("Can't find order with ID " + id);

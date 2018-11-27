@@ -1,10 +1,12 @@
 package orders.entities;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -27,7 +29,7 @@ public class Order {
 
     private LocalDate orderDate;
 
-    private LocalDate sendDate;
+    private LocalDateTime sendDate;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;

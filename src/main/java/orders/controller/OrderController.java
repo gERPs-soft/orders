@@ -64,6 +64,6 @@ public class OrderController {
 
     @RequestMapping("/{id}")
     public ResponseEntity findById(@PathVariable Long id) {
-        return new ResponseEntity(orderService.findById(id), HttpStatus.OK);
+        return new ResponseEntity(orderService.findById(id).get(), HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package orders.services.impl;
 
 import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
+import orders.entities.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;

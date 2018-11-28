@@ -2,6 +2,7 @@ package orders.controller;
 
 import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
+import orders.entities.Order;
 import orders.exceptions.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

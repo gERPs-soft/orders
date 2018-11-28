@@ -29,14 +29,12 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private CustomerRepository customerRepository;
     private OrderItemConverter orderItemConverter;
-    private OrderDtoConverter orderDtoConverter;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, OrderItemConverter orderItemConverter, OrderDtoConverter orderDtoConverter) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.orderItemConverter = orderItemConverter;
-        this.orderDtoConverter = orderDtoConverter;
     }
 
     @Override
@@ -47,8 +45,7 @@ public class OrderServiceImpl implements OrderService {
         order.setSellerId(orderDto.getSellerId());
         order.setOrderDate(LocalDate.now());
         order.setOrderStatus(OrderStatus.DRAFT);
-        order.setOrderItems(orderDto.getItems().stream()
-                .map(orderItemConverter).collect(Collectors.toList()));
+        order.setOrderItems(orderDto.getItems().stream().map(orderItemConverter).collect(Collectors.toList()));
         Order savedOrder = orderRepository.save(order);
         return savedOrder.getId();
     }

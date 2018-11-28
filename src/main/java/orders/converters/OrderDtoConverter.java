@@ -23,7 +23,7 @@ public class OrderDtoConverter implements Function<Order, OrderDto> {
         orderDto.setOrderId(order.getId());
         orderDto.setCustomerId(order.getCustomer().getId());
         orderDto.setSellerId(order.getSellerId());
-        orderDto.setItems(order.getOrderItems().stream().map(orderItemDtoConverter).collect(Collectors.toList()));
+       // orderDto.setItems(order.getOrderItems().stream().map(orderItemDtoConverter).collect(Collectors.toList()));
         return orderDto;
     }
 }

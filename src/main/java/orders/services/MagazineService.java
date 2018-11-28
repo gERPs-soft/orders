@@ -2,6 +2,7 @@ package orders.services;
 
 import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
+import orders.entities.Order;
 
 
 /**

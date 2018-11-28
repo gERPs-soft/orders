@@ -8,6 +8,7 @@ import orders.entities.Order;
 import orders.entities.OrderStatus;
 import orders.exceptions.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import orders.repositories.CustomerRepository;
 import orders.repositories.OrderRepository;
@@ -31,8 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderDtoConverter orderDtoConverter;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository,
-                            OrderItemConverter orderItemConverter, OrderDtoConverter orderDtoConverter) {
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, OrderItemConverter orderItemConverter, OrderDtoConverter orderDtoConverter) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.orderItemConverter = orderItemConverter;

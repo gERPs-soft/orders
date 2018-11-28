@@ -4,6 +4,7 @@ import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
 import orders.entities.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +16,8 @@ import orders.services.MagazineService;
 @Service
 public class MagazineServiceImpl implements MagazineService {
     private RestTemplate restTemplate;
+    @Value("${magazine.server.address}")
+    String magazineOrderUrl;
 
     @Autowired
     public MagazineServiceImpl(RestTemplateBuilder restTemplateBuilder) {
@@ -23,7 +26,6 @@ public class MagazineServiceImpl implements MagazineService {
 
     @Override
     public OrderStatusDetails postOrderToMagazine(OrderDto orderDto) {
-        String magazineOrderUrl = "http://localhost:8080/magazine/orders/add-order";
         OrderStatusDetails orderStatusDetails = restTemplate.postForObject(magazineOrderUrl, orderDto, OrderStatusDetails.class);
         return orderStatusDetails;
     }

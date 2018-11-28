@@ -22,7 +22,7 @@ public class MagazineServiceImpl implements MagazineService {
 
     @Override
     public OrderStatusDetails postOrderToMagazine(OrderDto orderDto) {
-        String magazineOrderUrl = "http://localhost:8082/magazine/orders/add-order";
+        String magazineOrderUrl = "http://localhost:8080/magazine/orders/add-order";
         OrderStatusDetails orderStatusDetails = restTemplate.postForObject(magazineOrderUrl, orderDto, OrderStatusDetails.class);
         return orderStatusDetails;
     }

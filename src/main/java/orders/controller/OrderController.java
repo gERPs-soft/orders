@@ -30,6 +30,7 @@ public class OrderController {
     public ResponseEntity saveOrder(@RequestBody OrderDto orderDto) {
         Long orderId = orderService.save(orderDto);
         //waiting for magazine implementation
+        orderDto.setOrderId(orderId);
         OrderStatusDetails orderStatusDetails = magazineService.postOrderToMagazine(orderDto);
         //mocked answer
         // LocalDateTime sendDate = LocalDateTime.now();

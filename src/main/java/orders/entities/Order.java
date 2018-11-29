@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "[order_tab]")
 public class Order {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne

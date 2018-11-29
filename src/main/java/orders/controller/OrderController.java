@@ -47,6 +47,7 @@ public class OrderController {
 
     //update order by magazine
     //order can by CANCELED by SELLER from VIEW
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/update_status")
     public ResponseEntity updateOrderStatus(@RequestBody OrderStatusDetails orderStatusDetails) {
         try {
@@ -58,12 +59,13 @@ public class OrderController {
         Long id = orderStatusDetails.getOrderId();
         return new ResponseEntity(HttpStatus.valueOf("Can't find order with id: " + id));
     }
-
+    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/orders")
     public ResponseEntity findAll() {
         return new ResponseEntity(orderService.findAll(), HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/{id}")
     public ResponseEntity findById(@PathVariable Long id) {
         return new ResponseEntity(orderService.findById(id).get(), HttpStatus.OK);

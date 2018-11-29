@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Table(name = "order_item")
 public class OrderItem {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     private Long productId;

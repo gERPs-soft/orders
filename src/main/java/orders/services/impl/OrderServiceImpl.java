@@ -15,6 +15,7 @@ import orders.repositories.OrderRepository;
 import orders.services.OrderService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,12 +30,14 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private CustomerRepository customerRepository;
     private OrderItemConverter orderItemConverter;
+    private OrderDtoConverter orderDtoConverter;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, OrderItemConverter orderItemConverter, OrderDtoConverter orderDtoConverter) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.orderItemConverter = orderItemConverter;
+        this.orderDtoConverter = orderDtoConverter;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
         Long customerId = orderDto.getCustomerId();
         order.setCustomer(customerRepository.findById(customerId).get());
         order.setSellerId(orderDto.getSellerId());
-        order.setOrderDate(LocalDate.now());
+        order.setOrderDate(LocalDateTime.now());
         order.setOrderStatus(OrderStatus.DRAFT);
         order.setOrderItems(orderDto.getItems().stream().map(orderItemConverter).collect(Collectors.toList()));
         //order.getOrderItems().forEach(orderItem -> orderItem.setOrder(order.getId()));
@@ -69,19 +72,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<OrderDto> findAll() {
         List<Order> orderList = new ArrayList<>();
         orderRepository.findAll().forEach(orderList::add);
-        return orderList;
+        return orderList.stream().map(orderDtoConverter).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Order> findById(Long id) {
+    public OrderDto findById(Long id) throws OrderNotFoundException {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
-            return optionalOrder;
+            return orderDtoConverter.apply(optionalOrder.get());
         } else {
-            return Optional.empty();
+            throw new OrderNotFoundException("Can't find order with ID " + id);
         }
     }
 

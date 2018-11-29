@@ -27,7 +27,7 @@ public class Order {
 
     private Long sellerId;
 
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
 
     private LocalDateTime sendDate;
 

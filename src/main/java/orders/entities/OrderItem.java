@@ -17,11 +17,8 @@ public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-
     private Long productId;
-
     private BigDecimal productPrice;
-
     private Integer quantity;
 
     @ManyToOne

@@ -15,6 +15,6 @@ import java.util.Optional;
 public interface OrderService {
     public Long save(OrderDto orderDto);
     public void updateStatus(OrderStatusDetails orderStatusDetails) throws OrderNotFoundException;
-    public List<Order> findAll();
-    public Optional<Order> findById(Long id);
+    public List<OrderDto> findAll();
+    public OrderDto findById(Long id) throws OrderNotFoundException;
 }

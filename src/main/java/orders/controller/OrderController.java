@@ -68,6 +68,11 @@ public class OrderController {
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/{id}")
     public ResponseEntity findById(@PathVariable Long id) {
-        return new ResponseEntity(orderService.findById(id).get(), HttpStatus.OK);
+        try {
+            return new ResponseEntity(orderService.findById(id), HttpStatus.OK);
+        } catch (OrderNotFoundException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.valueOf("Can't find order with id: " + id));
     }
 }

@@ -20,6 +20,7 @@ import java.util.List;
 /**
  * Created by szypows_local on 18.11.2018.
  */
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/order")
 @RestController
 public class OrderController {
@@ -35,7 +36,6 @@ public class OrderController {
         this.magazineService = magazineService;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/save")
     public ResponseEntity saveOrder(@RequestBody OrderDto orderDto) {
         logger.info("save new order()");
@@ -57,7 +57,6 @@ public class OrderController {
 
     //update order by magazine
     //order can by CANCELED by SELLER from VIEW
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/update_status")
     public ResponseEntity updateOrderStatus(@RequestBody OrderStatusDetails orderStatusDetails) {
         logger.info("update status of order with id = " + orderStatusDetails.getOrderId());
@@ -71,14 +70,12 @@ public class OrderController {
         return new ResponseEntity(HttpStatus.valueOf("Can't find order with id: " + id));
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/orders")
     public ResponseEntity findAll() {
         logger.info("get all orders");
         return new ResponseEntity(orderService.findAll(), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/{id}")
     public ResponseEntity findById(@PathVariable Long id) {
         logger.info("get order with id = " + id);

@@ -11,5 +11,10 @@ import java.util.List;
  */
 public interface CustomerService {
     public Customer findCustomerById(Long id) throws CustomernotFoundException;
+
     public List<Customer> findAllCustomers();
+
+    public Customer saveCustomer(Customer customer);
+
+    public void deleteCustomer(Long id);
 }

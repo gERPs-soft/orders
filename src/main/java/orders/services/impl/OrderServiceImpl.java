@@ -49,7 +49,6 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setOrderStatus(OrderStatus.DRAFT);
         order.setOrderItems(orderDto.getItems().stream().map(orderItemConverter).collect(Collectors.toList()));
-        //order.getOrderItems().forEach(orderItem -> orderItem.setOrder(order.getId()));
         Order savedOrder = orderRepository.save(order);
         Order finalSavedOrder = savedOrder;
         savedOrder.getOrderItems().forEach(orderItem -> orderItem.setOrder(finalSavedOrder));

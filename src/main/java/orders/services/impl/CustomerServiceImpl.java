@@ -44,4 +44,14 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.findAll().forEach(customerList::add);
         return customerList;
     }
+
+    @Override
+    public Customer saveCustomer(Customer customer) {
+        return customerRepository.save(customer);
+    }
+
+    @Override
+    public void deleteCustomer(Long id) {
+        customerRepository.deleteById(id);
+    }
 }

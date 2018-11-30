@@ -1,6 +1,6 @@
 package orders.controller;
 
-import orders.dto.CustomerDto;
+import orders.entities.Customer;
 import orders.exceptions.CustomernotFoundException;
 import orders.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Null;
 import java.util.List;
 
 /**
@@ -37,5 +38,20 @@ public class CustomerController {
             e.printStackTrace();
         }
         return new ResponseEntity(HttpStatus.valueOf("Can't find customer with id: " + id));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity saveCustomer(@RequestBody Customer customer) {
+        if (customerService.saveCustomer(customer) != null)
+            return new ResponseEntity(HttpStatus.OK);
+        else {
+            return new ResponseEntity(HttpStatus.valueOf("Can't save new customer"));
+        }
+    }
+
+    @RequestMapping("/delete/{id}")
+    public ResponseEntity deleteCustomer(@PathVariable Long id) {
+        customerService.deleteCustomer(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

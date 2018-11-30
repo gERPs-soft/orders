@@ -1,15 +1,13 @@
 package orders.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * Created by szypows_local on 18.11.2018.
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CustomerDto {
     private Long id;
     private String firstName;
@@ -20,8 +18,4 @@ public class CustomerDto {
     private String phoneNumber;
     private String email;
     private String customerType;
-
-    public CustomerDto() {
-    }
-
 }

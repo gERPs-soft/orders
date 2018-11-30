@@ -1,11 +1,13 @@
 package orders.services;
 
 import orders.dto.OrderDto;
-import orders.dto.OrderStatusDto;
+import orders.dto.OrderStatusDetails;
+import orders.entities.Order;
+
 
 /**
  * Created by szypows_local on 19.11.2018.
  */
 public interface MagazineService {
-    public OrderStatusDto postOrderToMagazine(OrderDto orderDto);
+    public OrderStatusDetails postOrderToMagazine(OrderDto orderDto);
 }

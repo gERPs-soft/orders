@@ -14,6 +14,11 @@ public class CustomerDtoConverter implements Function<Customer, CustomerDto> {
     @Override
     public CustomerDto apply(Customer customer) {
         CustomerDto customerdto = new CustomerDto();
+        customerdto.setAddress(customer.getAddress());
+        customerdto.setCompanyName(customer.getCompanyName());
+        customerdto.setAddress(customer.getAddress());
+        customerdto.setAddress(customer.getAddress());
+        customerdto.setAddress(customer.getAddress());
         return customerdto;
     }
 }

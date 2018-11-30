@@ -1,18 +1,24 @@
 package orders.services.impl;
 
+import orders.converters.OrderDtoConverter;
 import orders.converters.OrderItemConverter;
 import orders.dto.OrderDto;
+import orders.dto.OrderStatusDetails;
 import orders.entities.Order;
 import orders.entities.OrderStatus;
+import orders.exceptions.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import orders.repositories.CustomerRepository;
 import orders.repositories.OrderRepository;
 import orders.services.OrderService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -20,31 +26,65 @@ import java.util.stream.Collectors;
  */
 @Service
 public class OrderServiceImpl implements OrderService {
-    @Autowired
+
     private OrderRepository orderRepository;
-    @Autowired
     private CustomerRepository customerRepository;
-    @Autowired
     private OrderItemConverter orderItemConverter;
-
-    private RestTemplate restTemplate;
+    private OrderDtoConverter orderDtoConverter;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository,
-                            OrderItemConverter orderItemConverter, RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, OrderItemConverter orderItemConverter, OrderDtoConverter orderDtoConverter) {
+        this.orderRepository = orderRepository;
+        this.customerRepository = customerRepository;
+        this.orderItemConverter = orderItemConverter;
+        this.orderDtoConverter = orderDtoConverter;
     }
 
     @Override
-    public void save(OrderDto orderDto) {
+    public Long save(OrderDto orderDto) {
         Order order = new Order();
         Long customerId = orderDto.getCustomerId();
         order.setCustomer(customerRepository.findById(customerId).get());
         order.setSellerId(orderDto.getSellerId());
-        order.setOrderDate(LocalDate.now());
+        order.setOrderDate(LocalDateTime.now());
         order.setOrderStatus(OrderStatus.DRAFT);
-        order.setOrderItems(orderDto.getItems().stream()
-                .map(orderItemConverter).collect(Collectors.toList()));
-        orderRepository.save(order);
+        order.setOrderItems(orderDto.getItems().stream().map(orderItemConverter).collect(Collectors.toList()));
+        Order savedOrder = orderRepository.save(order);
+        Order finalSavedOrder = savedOrder;
+        savedOrder.getOrderItems().forEach(orderItem -> orderItem.setOrder(finalSavedOrder));
+        Order savedOrderUpdated = orderRepository.save(savedOrder);
+        return savedOrderUpdated.getId();
     }
+
+    @Override
+    public void updateStatus(OrderStatusDetails orderStatusDetails) throws OrderNotFoundException {
+        Long id = orderStatusDetails.getOrderId();
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            order.setOrderStatus(orderStatusDetails.getOrderStatus());
+            order.setSendDate(orderStatusDetails.getSendDate());
+            orderRepository.save(order);
+        } else {
+            throw new OrderNotFoundException("Can't find order with ID " + id);
+        }
+    }
+
+    @Override
+    public List<OrderDto> findAll() {
+        List<Order> orderList = new ArrayList<>();
+        orderRepository.findAll().forEach(orderList::add);
+        return orderList.stream().map(orderDtoConverter).collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderDto findById(Long id) throws OrderNotFoundException {
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        if (optionalOrder.isPresent()) {
+            return orderDtoConverter.apply(optionalOrder.get());
+        } else {
+            throw new OrderNotFoundException("Can't find order with ID " + id);
+        }
+    }
+
 }

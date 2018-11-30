@@ -1,27 +1,20 @@
 package orders.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 /**
  * Created by szypows_local on 18.11.2018.
  */
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderItemDto {
 
     private Long productId;
     private Integer quantity;
     private BigDecimal productPrice;
+   // private Long orderId;
 
-    public OrderItemDto() {
-    }
-
-    public OrderItemDto(Long productId, Integer quantity, BigDecimal productPrice) {
-        this.productId = productId;
-        this.quantity = quantity;
-        this.productPrice = productPrice;
-    }
 }

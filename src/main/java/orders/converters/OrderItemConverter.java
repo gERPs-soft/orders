@@ -2,6 +2,7 @@ package orders.converters;
 
 import orders.dto.OrderItemDto;
 import orders.entities.OrderItem;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
@@ -11,6 +12,8 @@ import java.util.function.Function;
  */
 @Component
 public class OrderItemConverter implements Function<OrderItemDto, OrderItem> {
+    @Autowired
+    private OrderDtoConverter orderDtoConverter;
 
     @Override
     public OrderItem apply(OrderItemDto orderItemDto) {
@@ -18,6 +21,7 @@ public class OrderItemConverter implements Function<OrderItemDto, OrderItem> {
         orderItem.setProductId(orderItemDto.getProductId());
         orderItem.setQuantity(orderItemDto.getQuantity());
         orderItem.setProductPrice(orderItemDto.getProductPrice());
+     //   orderItem.setOrder(orderDtoConverter.apply(orderItemDto.getOrderDto()));
         return orderItem;
     }
 }

@@ -15,6 +15,6 @@ public class OrderItemDto {
     private Long productId;
     private Integer quantity;
     private BigDecimal productPrice;
-    private Long orderId;
+   // private Long orderId;
 
 }

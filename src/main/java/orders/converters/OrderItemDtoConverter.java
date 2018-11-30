@@ -18,7 +18,7 @@ public class OrderItemDtoConverter implements Function<OrderItem, OrderItemDto> 
         orderItemDto.setProductId(orderItem.getProductId());
         orderItemDto.setProductPrice(orderItem.getProductPrice());
         orderItemDto.setQuantity(orderItem.getQuantity());
-        orderItemDto.setOrderId(orderItem.getOrder().getId());
+       // orderItemDto.setOrderId(orderItem.getOrder().getId());
         return orderItemDto;
     }
 }

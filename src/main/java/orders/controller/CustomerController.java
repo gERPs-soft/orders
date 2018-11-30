@@ -43,7 +43,7 @@ public class CustomerController {
         return new ResponseEntity(HttpStatus.valueOf("Can't find customer with id: " + id));
     }
 
-    @PostMapping("/add")
+    @PostMapping("/save")
     public ResponseEntity saveCustomer(@RequestBody Customer customer) {
         logger.info("save new customer()");
         if (customerService.saveCustomer(customer) != null)

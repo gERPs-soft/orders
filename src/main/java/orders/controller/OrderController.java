@@ -4,6 +4,8 @@ import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
 import orders.entities.Order;
 import orders.exceptions.OrderNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +23,22 @@ import java.util.List;
 @RequestMapping("/order")
 @RestController
 public class OrderController {
-    @Autowired
+
+
     private OrderService orderService;
-    @Autowired
     private MagazineService magazineService;
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+
+    @Autowired
+    public OrderController(OrderService orderService, MagazineService magazineService) {
+        this.orderService = orderService;
+        this.magazineService = magazineService;
+    }
 
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/save")
     public ResponseEntity saveOrder(@RequestBody OrderDto orderDto) {
+        logger.info("save new order()");
         Long orderId = orderService.save(orderDto);
         //waiting for magazine implementation
         orderDto.setOrderId(orderId);
@@ -50,6 +60,7 @@ public class OrderController {
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/update_status")
     public ResponseEntity updateOrderStatus(@RequestBody OrderStatusDetails orderStatusDetails) {
+        logger.info("update status of order with id = " + orderStatusDetails.getOrderId());
         try {
             orderService.updateStatus(orderStatusDetails);
             return new ResponseEntity(HttpStatus.OK);
@@ -59,15 +70,18 @@ public class OrderController {
         Long id = orderStatusDetails.getOrderId();
         return new ResponseEntity(HttpStatus.valueOf("Can't find order with id: " + id));
     }
+
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/orders")
     public ResponseEntity findAll() {
+        logger.info("get all orders");
         return new ResponseEntity(orderService.findAll(), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/{id}")
     public ResponseEntity findById(@PathVariable Long id) {
+        logger.info("get order with id = " + id);
         try {
             return new ResponseEntity(orderService.findById(id), HttpStatus.OK);
         } catch (OrderNotFoundException e) {

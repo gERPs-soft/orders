@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Created by szypows_local on 30.11.2018.
  */
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/customer")
 @RestController
 public class CustomerController {
@@ -25,14 +26,12 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/customers")
     public ResponseEntity findAllCustomers() {
         logger.info("find all customers()");
         return new ResponseEntity(customerService.findAllCustomers(), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/{id}")
     public ResponseEntity findCustomerById(@PathVariable Long id) {
         logger.info("find Customer by id = " + id);
@@ -44,8 +43,7 @@ public class CustomerController {
         return new ResponseEntity(HttpStatus.valueOf("Can't find customer with id: " + id));
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/add")
+    @PostMapping("/save")
     public ResponseEntity saveCustomer(@RequestBody Customer customer) {
         logger.info("save new customer()");
         if (customerService.saveCustomer(customer) != null)
@@ -55,7 +53,6 @@ public class CustomerController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("/delete/{id}")
     public ResponseEntity deleteCustomer(@PathVariable Long id) {
         logger.info("delete customer with id = " + id);

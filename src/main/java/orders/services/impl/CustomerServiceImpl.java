@@ -1,18 +1,16 @@
 package orders.services.impl;
 
 import orders.converters.CustomerDtoConverter;
-import orders.dto.CustomerDto;
 import orders.entities.Customer;
 import orders.exceptions.CustomernotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import orders.repositories.CustomerRepository;
 import orders.services.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Created by szypows_local on 18.11.2018.
@@ -41,6 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> findAllCustomers() {
         List<Customer> customerList = new ArrayList<>();
+        // RW: as we not transform the result further, then it can be returned straight away
         customerRepository.findAll().forEach(customerList::add);
         return customerList;
     }

@@ -2,19 +2,15 @@ package orders.controller;
 
 import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
-import orders.entities.Order;
 import orders.exceptions.OrderNotFoundException;
+import orders.services.MagazineService;
+import orders.services.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import orders.services.MagazineService;
-import orders.services.OrderService;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 
 /**
@@ -39,6 +35,8 @@ public class OrderController {
     @PostMapping("/save")
     public ResponseEntity saveOrder(@RequestBody OrderDto orderDto) {
         logger.info("save new order()");
+        // RW: the whole logic should br moved to service layer.
+        // It is general rule to move complex logic behind the scene.
         Long orderId = orderService.save(orderDto);
         //waiting for magazine implementation
         orderDto.setOrderId(orderId);

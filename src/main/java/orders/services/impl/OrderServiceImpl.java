@@ -7,14 +7,12 @@ import orders.dto.OrderStatusDetails;
 import orders.entities.Order;
 import orders.entities.OrderStatus;
 import orders.exceptions.OrderNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.stereotype.Service;
 import orders.repositories.CustomerRepository;
 import orders.repositories.OrderRepository;
 import orders.services.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Long save(OrderDto orderDto) {
+        // RW: build new order can be moved to separate private method. Cleaner code.
         Order order = new Order();
         Long customerId = orderDto.getCustomerId();
         order.setCustomer(customerRepository.findById(customerId).get());
@@ -50,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(OrderStatus.DRAFT);
         order.setOrderItems(orderDto.getItems().stream().map(orderItemConverter).collect(Collectors.toList()));
         Order savedOrder = orderRepository.save(order);
+        // RW: this line is not needed (below).
         Order finalSavedOrder = savedOrder;
         savedOrder.getOrderItems().forEach(orderItem -> orderItem.setOrder(finalSavedOrder));
         Order savedOrderUpdated = orderRepository.save(savedOrder);
@@ -72,6 +72,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> findAll() {
+        // RW: why not in this way ;) ?
+        /**
+         StreamSupport.stream(orderRepository.findAll().spliterator(), false)
+         .map(orderDtoConverter)
+         .collect(Collectors.toList());
+         */
         List<Order> orderList = new ArrayList<>();
         orderRepository.findAll().forEach(orderList::add);
         return orderList.stream().map(orderDtoConverter).collect(Collectors.toList());

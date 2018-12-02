@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
 
     private CustomerService customerService;
+    // RW: by convention, all constants in Java are upper cased, e.g.: LOGGER
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
@@ -29,6 +30,9 @@ public class CustomerController {
     @RequestMapping("/customers")
     public ResponseEntity findAllCustomers() {
         logger.info("find all customers()");
+
+        //RW: this ResponseEntity should by typed, means ResponseEntity<Customer>
+        // Thanks it is easier to understand what is the output.
         return new ResponseEntity(customerService.findAllCustomers(), HttpStatus.OK);
     }
 
@@ -38,8 +42,12 @@ public class CustomerController {
         try {
             return new ResponseEntity(customerService.findCustomerById(id), HttpStatus.OK);
         } catch (CustomernotFoundException e) {
+            // RW: use logger here, e.g.:
+            // logger.warn("Customer with ID: " + id + " not found.", e);
+            // Do not such solution to handle catch clause.
             e.printStackTrace();
         }
+        // RW: 404 should be returned here.
         return new ResponseEntity(HttpStatus.valueOf("Can't find customer with id: " + id));
     }
 

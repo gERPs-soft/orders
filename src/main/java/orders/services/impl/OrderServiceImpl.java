@@ -4,17 +4,17 @@ import orders.converters.OrderDtoConverter;
 import orders.converters.OrderItemConverter;
 import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
+import orders.entities.Customer;
 import orders.entities.Order;
 import orders.entities.OrderStatus;
+import orders.exceptions.CustomernotFoundException;
 import orders.exceptions.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import orders.repositories.CustomerRepository;
 import orders.repositories.OrderRepository;
 import orders.services.OrderService;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,20 +41,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long save(OrderDto orderDto) {
+    public Order save(OrderDto orderDto) throws CustomernotFoundException {
         Order order = new Order();
         Long customerId = orderDto.getCustomerId();
-        order.setCustomer(customerRepository.findById(customerId).get());
-        order.setSellerId(orderDto.getSellerId());
-        order.setOrderDate(LocalDateTime.now());
-        order.setOrderStatus(OrderStatus.DRAFT);
-        order.setOrderItems(orderDto.getItems().stream().map(orderItemConverter).collect(Collectors.toList()));
-        Order savedOrder = orderRepository.save(order);
-        Order finalSavedOrder = savedOrder;
-        savedOrder.getOrderItems().forEach(orderItem -> orderItem.setOrder(finalSavedOrder));
-        Order savedOrderUpdated = orderRepository.save(savedOrder);
-        return savedOrderUpdated.getId();
+        Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        if (customerOptional.isPresent()) {
+            order.setCustomer(customerOptional.get());
+            order.setSellerId(orderDto.getSellerId());
+            order.setOrderDate(LocalDateTime.now());
+            order.setOrderStatus(OrderStatus.DRAFT);
+            order.setOrderItems(orderDto.getItems().stream().map(orderItemConverter).collect(Collectors.toList()));
+            Order savedOrder = orderRepository.save(order);
+            savedOrder.getOrderItems().forEach(orderItem -> orderItem.setOrder(savedOrder));
+            Order savedOrderUpdated = orderRepository.save(savedOrder);
+            return savedOrderUpdated;
+        } else {
+            throw new CustomernotFoundException("Can't find customer with id: " + customerId);
+        }
     }
+
 
     @Override
     public void updateStatus(OrderStatusDetails orderStatusDetails) throws OrderNotFoundException {

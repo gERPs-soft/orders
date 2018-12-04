@@ -9,7 +9,10 @@ import orders.entities.Order;
 import orders.entities.OrderStatus;
 import orders.exceptions.CustomernotFoundException;
 import orders.exceptions.OrderNotFoundException;
+import orders.services.MagazineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import orders.repositories.CustomerRepository;
 import orders.repositories.OrderRepository;
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by szypows_local on 18.11.2018.
@@ -31,35 +35,46 @@ public class OrderServiceImpl implements OrderService {
     private CustomerRepository customerRepository;
     private OrderItemConverter orderItemConverter;
     private OrderDtoConverter orderDtoConverter;
+    private MagazineService magazineService;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, OrderItemConverter orderItemConverter, OrderDtoConverter orderDtoConverter) {
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository,
+                            OrderItemConverter orderItemConverter, OrderDtoConverter orderDtoConverter,
+                            MagazineService magazineService) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.orderItemConverter = orderItemConverter;
         this.orderDtoConverter = orderDtoConverter;
+        this.magazineService = magazineService;
     }
 
     @Override
-    public Order save(OrderDto orderDto) throws CustomernotFoundException {
-        Order order = new Order();
+    public ResponseEntity save(OrderDto orderDto) throws CustomernotFoundException, OrderNotFoundException {
+        Order order;
         Long customerId = orderDto.getCustomerId();
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         if (customerOptional.isPresent()) {
-            order.setCustomer(customerOptional.get());
-            order.setSellerId(orderDto.getSellerId());
-            order.setOrderDate(LocalDateTime.now());
-            order.setOrderStatus(OrderStatus.DRAFT);
-            order.setOrderItems(orderDto.getItems().stream().map(orderItemConverter).collect(Collectors.toList()));
-            Order savedOrder = orderRepository.save(order);
+            Order orderToSave = newOrderBulider(orderDto, customerOptional);
+            Order savedOrder = orderRepository.save(orderToSave);
             savedOrder.getOrderItems().forEach(orderItem -> orderItem.setOrder(savedOrder));
-            Order savedOrderUpdated = orderRepository.save(savedOrder);
-            return savedOrderUpdated;
+            order = orderRepository.save(savedOrder);
         } else {
             throw new CustomernotFoundException("Can't find customer with id: " + customerId);
         }
+        OrderStatusDetails orderStatusDetails = magazineService.postOrderToMagazine(order);
+        this.updateStatus(orderStatusDetails);
+        return new ResponseEntity(orderStatusDetails.getSendDate(), HttpStatus.OK);
     }
 
+    private Order newOrderBulider(OrderDto orderDto, Optional<Customer> customerOptional) {
+        Order orderToSave = new Order();
+        orderToSave.setCustomer(customerOptional.get());
+        orderToSave.setSellerId(orderDto.getSellerId());
+        orderToSave.setOrderDate(LocalDateTime.now());
+        orderToSave.setOrderStatus(OrderStatus.DRAFT);
+        orderToSave.setOrderItems(orderDto.getItems().stream().map(orderItemConverter).collect(Collectors.toList()));
+        return orderToSave;
+    }
 
     @Override
     public void updateStatus(OrderStatusDetails orderStatusDetails) throws OrderNotFoundException {
@@ -77,9 +92,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> findAll() {
-        List<Order> orderList = new ArrayList<>();
-        orderRepository.findAll().forEach(orderList::add);
-        return orderList.stream().map(orderDtoConverter).collect(Collectors.toList());
+        return StreamSupport.stream(orderRepository.findAll().spliterator(), false)
+                .map(orderDtoConverter)
+                .collect(Collectors.toList());
     }
 
     @Override

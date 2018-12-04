@@ -2,7 +2,6 @@ package orders.controller;
 
 import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
-import orders.entities.Order;
 import orders.exceptions.CustomernotFoundException;
 import orders.exceptions.OrderNotFoundException;
 import org.slf4j.Logger;
@@ -11,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import orders.services.MagazineService;
 import orders.services.OrderService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -27,33 +24,26 @@ public class OrderController {
 
 
     private OrderService orderService;
-    private MagazineService magazineService;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
-    public OrderController(OrderService orderService, MagazineService magazineService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.magazineService = magazineService;
     }
 
     @PostMapping("/save")
-    public ResponseEntity<LocalDateTime> saveOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity saveOrder(@RequestBody OrderDto orderDto) {
         LOGGER.info("save order()");
-        Order order;
         try {
-            order = orderService.save(orderDto);
+            return orderService.save(orderDto);
         } catch (CustomernotFoundException e) {
             LOGGER.warn("Can't find customer with id: " + orderDto.getCustomerId());
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        OrderStatusDetails orderStatusDetails = magazineService.postOrderToMagazine(order);
-        try {
-            orderService.updateStatus(orderStatusDetails);
-            return new ResponseEntity(orderStatusDetails.getSendDate(), HttpStatus.OK);
         } catch (OrderNotFoundException e) {
-            LOGGER.warn("Can't find order with id: " + orderStatusDetails.getOrderId());
+            LOGGER.warn(e.getMessage());
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     //update order by magazine

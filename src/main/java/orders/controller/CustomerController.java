@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Created by szypows_local on 30.11.2018.
  */
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
 
     private CustomerService customerService;
-    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
     public CustomerController(CustomerService customerService) {
@@ -27,35 +29,35 @@ public class CustomerController {
     }
 
     @RequestMapping("/customers")
-    public ResponseEntity findAllCustomers() {
-        logger.info("find all customers()");
+    public ResponseEntity<List<Customer>> findAllCustomers() {
+        LOGGER.info("find all customers()");
         return new ResponseEntity(customerService.findAllCustomers(), HttpStatus.OK);
     }
 
     @RequestMapping("/{id}")
-    public ResponseEntity findCustomerById(@PathVariable Long id) {
-        logger.info("find Customer by id = " + id);
+    public ResponseEntity<Customer> findCustomerById(@PathVariable Long id) {
+        LOGGER.info("find Customer by id = " + id);
         try {
             return new ResponseEntity(customerService.findCustomerById(id), HttpStatus.OK);
         } catch (CustomernotFoundException e) {
-            e.printStackTrace();
+            LOGGER.warn("Can't find customer with id: " + id);
         }
-        return new ResponseEntity(HttpStatus.valueOf("Can't find customer with id: " + id));
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/save")
     public ResponseEntity saveCustomer(@RequestBody Customer customer) {
-        logger.info("save new customer()");
+        LOGGER.info("save new customer()");
         if (customerService.saveCustomer(customer) != null)
             return new ResponseEntity(HttpStatus.OK);
         else {
-            return new ResponseEntity(HttpStatus.valueOf("Can't save new customer"));
+            return new ResponseEntity(HttpStatus.NOT_MODIFIED);
         }
     }
 
     @RequestMapping("/delete/{id}")
     public ResponseEntity deleteCustomer(@PathVariable Long id) {
-        logger.info("delete customer with id = " + id);
+        LOGGER.info("delete customer with id = " + id);
         customerService.deleteCustomer(id);
         return new ResponseEntity(HttpStatus.OK);
     }

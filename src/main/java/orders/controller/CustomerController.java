@@ -47,7 +47,7 @@ public class CustomerController {
 
     @PostMapping("/save")
     public ResponseEntity saveCustomer(@RequestBody Customer customer) {
-        LOGGER.info("save new customer()");
+        LOGGER.info("save customer()");
         if (customerService.saveCustomer(customer) != null)
             return new ResponseEntity(HttpStatus.OK);
         else {
@@ -55,10 +55,10 @@ public class CustomerController {
         }
     }
 
-    @RequestMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteCustomer(@PathVariable Long id) {
         LOGGER.info("delete customer with id = " + id);
         customerService.deleteCustomer(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity("Customer deleted ",HttpStatus.OK);
     }
 }

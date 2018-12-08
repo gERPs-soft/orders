@@ -23,12 +23,10 @@ import java.util.stream.StreamSupport;
 public class CustomerServiceImpl implements CustomerService {
 
     private CustomerRepository customerRepository;
-    private CustomerDtoConverter customerDtoConverter;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerDtoConverter customerDtoConverter) {
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.customerDtoConverter = customerDtoConverter;
     }
 
     @Override

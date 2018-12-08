@@ -59,6 +59,6 @@ public class CustomerController {
     public ResponseEntity deleteCustomer(@PathVariable Long id) {
         LOGGER.info("delete customer with id = " + id);
         customerService.deleteCustomer(id);
-        return new ResponseEntity("Customer deleted ",HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

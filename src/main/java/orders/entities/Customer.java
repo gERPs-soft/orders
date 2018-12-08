@@ -24,6 +24,7 @@ public class Customer {
     private String nip;
     private String phoneNumber;
     private String email;
+    private boolean active = true;
 
     @Enumerated(EnumType.STRING)
     private CustomerType customerType;

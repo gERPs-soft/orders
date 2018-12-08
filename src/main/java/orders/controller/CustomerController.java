@@ -48,9 +48,9 @@ public class CustomerController {
     @PostMapping("/save")
     public ResponseEntity saveCustomer(@RequestBody Customer customer) {
         LOGGER.info("save customer()");
-        if (customerService.saveCustomer(customer) != null)
+        if (customerService.saveCustomer(customer) != null) {
             return new ResponseEntity(HttpStatus.OK);
-        else {
+        } else {
             return new ResponseEntity(HttpStatus.NOT_MODIFIED);
         }
     }
@@ -58,7 +58,13 @@ public class CustomerController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteCustomer(@PathVariable Long id) {
         LOGGER.info("delete customer with id = " + id);
-        customerService.deleteCustomer(id);
-        return new ResponseEntity(HttpStatus.OK);
+        try {
+            if (customerService.deleteCustomer(id) != null) {
+                return new ResponseEntity(HttpStatus.OK);
+            }
+        } catch (CustomernotFoundException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.NOT_MODIFIED);
     }
 }

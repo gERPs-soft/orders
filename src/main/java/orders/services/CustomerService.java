@@ -1,6 +1,5 @@
 package orders.services;
 
-import orders.dto.CustomerDto;
 import orders.entities.Customer;
 import orders.exceptions.CustomernotFoundException;
 
@@ -16,5 +15,5 @@ public interface CustomerService {
 
     public Customer saveCustomer(Customer customer);
 
-    public void deleteCustomer(Long id);
+    public Customer deleteCustomer(Long id) throws CustomernotFoundException;
 }

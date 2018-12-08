@@ -36,7 +36,8 @@ public class OrderController {
     public ResponseEntity saveOrder(@RequestBody OrderDto orderDto) {
         LOGGER.info("save order()");
         try {
-            return orderService.save(orderDto);
+            OrderStatusDetails orderStatusDetails = orderService.save(orderDto);
+            return new ResponseEntity(orderStatusDetails, HttpStatus.OK);
         } catch (CustomernotFoundException e) {
             LOGGER.warn("Can't find customer with id: " + orderDto.getCustomerId());
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -46,8 +47,6 @@ public class OrderController {
         }
     }
 
-    //update order by magazine
-    //order can by CANCELED by SELLER from VIEW
     @PostMapping("/update_status")
     public ResponseEntity updateOrderStatus(@RequestBody OrderStatusDetails orderStatusDetails) {
         LOGGER.info("update status of order with id = " + orderStatusDetails.getOrderId());

@@ -19,7 +19,6 @@ import orders.repositories.OrderRepository;
 import orders.services.OrderService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,10 +48,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity save(OrderDto orderDto) throws CustomernotFoundException, OrderNotFoundException {
+    public OrderStatusDetails save(OrderDto orderDto) throws CustomernotFoundException, OrderNotFoundException {
         Order order;
         Long customerId = orderDto.getCustomerId();
-        Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        Optional<Customer> customerOptional = customerRepository.findByIdAndActiveTrue(customerId);
         if (customerOptional.isPresent()) {
             Order orderToSave = newOrderBulider(orderDto, customerOptional);
             Order savedOrder = orderRepository.save(orderToSave);
@@ -63,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
         }
         OrderStatusDetails orderStatusDetails = magazineService.postOrderToMagazine(order);
         this.updateStatus(orderStatusDetails);
-        return new ResponseEntity(orderStatusDetails.getSendDate(), HttpStatus.OK);
+        return orderStatusDetails;
     }
 
     private Order newOrderBulider(OrderDto orderDto, Optional<Customer> customerOptional) {
@@ -79,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateStatus(OrderStatusDetails orderStatusDetails) throws OrderNotFoundException {
         Long id = orderStatusDetails.getOrderId();
-        Optional<Order> orderOptional = orderRepository.findById(id);
+        Optional<Order> orderOptional = orderRepository.findByIdAndOrderStatusNotLike(id, OrderStatus.CANCELED);
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
             order.setOrderStatus(orderStatusDetails.getOrderStatus());
@@ -92,14 +91,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> findAll() {
-        return StreamSupport.stream(orderRepository.findAll().spliterator(), false)
+        return StreamSupport.stream(orderRepository.findAllByOrderStatusNotLike(OrderStatus.CANCELED).spliterator(), false)
                 .map(orderDtoConverter)
                 .collect(Collectors.toList());
     }
 
     @Override
     public OrderDto findById(Long id) throws OrderNotFoundException {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
+        Optional<Order> optionalOrder = orderRepository.findByIdAndOrderStatusNotLike(id, OrderStatus.CANCELED);
         if (optionalOrder.isPresent()) {
             return orderDtoConverter.apply(optionalOrder.get());
         } else {

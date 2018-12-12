@@ -82,7 +82,9 @@ public class OrderServiceImpl implements OrderService {
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
             order.setOrderStatus(orderStatusDetails.getOrderStatus());
-            order.setSendDate(orderStatusDetails.getSendDate());
+            if (orderStatusDetails.getSendDate() != null) {
+                order.setSendDate(orderStatusDetails.getSendDate());
+            }
             orderRepository.save(order);
         } else {
             throw new OrderNotFoundException("Can't find order with ID " + id);

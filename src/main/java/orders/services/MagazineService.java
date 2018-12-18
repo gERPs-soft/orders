@@ -3,6 +3,7 @@ package orders.services;
 import orders.dto.OrderDto;
 import orders.dto.OrderStatusDetails;
 import orders.entities.Order;
+import orders.entities.OrderStatus;
 
 
 /**
@@ -10,4 +11,7 @@ import orders.entities.Order;
  */
 public interface MagazineService {
     public OrderStatusDetails postOrderToMagazine(Order order);
+
+    //void updateStatusInMagazine(Long orderId, OrderStatus orderStatus);
+    OrderStatusDetails updateStatusInMagazine(OrderStatusDetails orderStatusDetails);
 }

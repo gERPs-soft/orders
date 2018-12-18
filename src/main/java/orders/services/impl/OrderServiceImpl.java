@@ -11,8 +11,6 @@ import orders.exceptions.CustomernotFoundException;
 import orders.exceptions.OrderNotFoundException;
 import orders.services.MagazineService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import orders.repositories.CustomerRepository;
 import orders.repositories.OrderRepository;
@@ -86,6 +84,10 @@ public class OrderServiceImpl implements OrderService {
                 order.setSendDate(orderStatusDetails.getSendDate());
             }
             orderRepository.save(order);
+
+            if (orderStatusDetails.getOrderStatus().toString() == "CANCELED") {
+                magazineService.updateStatusInMagazine(orderStatusDetails);
+            }
         } else {
             throw new OrderNotFoundException("Can't find order with ID " + id);
         }

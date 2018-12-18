@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by szypows_local on 17.11.2018.
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class Customer {
+public class Customer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

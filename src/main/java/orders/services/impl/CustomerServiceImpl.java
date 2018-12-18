@@ -5,6 +5,7 @@ import orders.exceptions.CustomernotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import orders.repositories.CustomerRepository;
 import orders.services.CustomerService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Cacheable(value = "CustomerCache")
     public List<Customer> findAllCustomers() {
         return StreamSupport.stream(customerRepository.findAllByActiveTrue().spliterator(), false)
                 .collect(Collectors.toList());
